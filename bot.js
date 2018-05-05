@@ -3,8 +3,7 @@ const YTDL = require("ytdl-core");
 const superagent = require("superagent");
 const fs = require("fs");
 
-const TOKEN = "NDM2MjEyOTE1MDcxMzUyODMy.DbkOcg.mr_sYXZzXOCz1V7NrwrxebL1Uos";
-const PREFIX = "::"
+const PREFIX = ";;"
 
 function play(connection, message) {
     var server = servers[message.guild.id];
@@ -183,4 +182,4 @@ bot.on("message", function(message) {
     }
 });
 
-bot.login(TOKEN);
+bot.login(process.env.BOT_TOKEN);
