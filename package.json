@@ -1,0 +1,18 @@
+{
+  "name": "nutellabot",
+  "version": "1.0.0",
+  "description": "A Bot that likes Nutella",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "UnlegitHax",
+  "license": "ISC",
+  "dependencies": {
+    "discord.js": "^11.3.2",
+    "ffmpeg": "^0.0.4",
+    "opusscript": "0.0.6",
+    "superagent": "^3.8.3",
+    "ytdl-core": "^0.20.2"
+  }
+}
