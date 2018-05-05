@@ -1,7 +1,6 @@
 const Discord = require("discord.js");
 const YTDL = require("ytdl-core");
 const superagent = require("superagent");
-const fs = require("fs");
 
 const PREFIX = ";;"
 
