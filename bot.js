@@ -1,21 +1,7 @@
 const Discord = require("discord.js");
-const YTDL = require("ytdl-core");
 const superagent = require("superagent");
 
 const PREFIX = ";;"
-
-function play(connection, message) {
-    var server = servers[message.guild.id];
-
-    server.dispatcher = connection.playStream(YTDL(server.queue[0], {filter: "audioonly"}));
-
-    server.queue.shift();
-
-    server.dispatcher.on("end" ,function() {
-        if (server.queue[0]) play(connection, message);
-        else connection.disconnect();
-    });
-};
 
 var fortunes = [
     "Ja",
@@ -32,8 +18,6 @@ var fortunes = [
 ];
 
 var bot = new Discord.Client();
-
-var servers = {};
 
 bot.on("ready", function() {
     console.log("Ich mag Nutella");
@@ -75,9 +59,7 @@ bot.on("message", function(message) {
                 .addField(";;owner", "Sendet den Owner und die Sozialen Medien von ihm")
                 .addField(";;ban", "Bannt den in der Nachricht erwähnten User")
                 .addField(";;kick", "Kickt den in der Nachricht erwähnten User")
-                .addField(";;play <YT Link>", "Spielt Musik ab (ACHTUNG NUR YT LINKS) [MUSIK BETA]")
-                .addField(";;skip", "Überspringt den aktuellen Song")
-                .addField(";;stop", "Stoppt den Song")
+                .addField(";;invite", "Sendet den Bot Invite")
                 .setColor(0x8e44ad)
                 .setFooter("Das sind alle Commands die es zur Zeit gibt!")
             message.channel.sendEmbed(embed)
@@ -143,39 +125,6 @@ bot.on("message", function(message) {
             member1.kick({
                 reason: `Kicked by ${message.author.tag}`
             });
-            break;
-        case "play":
-            if (!args[1]) {
-                message.channel.sendMessage("Bitte gebe einen Link an!")
-                return;
-            }
-
-            if (!message.member.voiceChannel) {
-                message.channel.sendMessage("Du musst in einem Voice Channel sein!")
-                return;
-            }
-
-            if (!servers[message.guild.id]) servers[message.guild.id] = {
-                queue: []
-            };
-
-            var server = servers[message.guild.id];
-
-            server.queue.push(args[1]);                                   
-
-            if (!message.guild.voiceConnection) message.member.voiceChannel.join().then(function(connection) {
-                play(connection, message);
-            });
-            break;
-        case "skip":
-            var server = servers[message.guild.id]
-
-            if (server.dispatcher) server.dispatcher.end();
-            break;
-        case "stop":
-            var server = servers[message.guild.id]
-
-            if (message.guild.voiceConnection) message.guild.voiceConnection.disconnect();
             break;
         case "invite":
             var embed = new Discord.RichEmbed
