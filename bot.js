@@ -20,7 +20,7 @@ var fortunes = [
 var bot = new Discord.Client();
 
 bot.on("ready", function() {
-    console.log("Ich mag Nutella");
+    console.log(`Ich mag Nutella! ${bot.guilds.size}`);
 
     bot.user.setGame(";;help");
 });
