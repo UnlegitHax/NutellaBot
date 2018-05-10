@@ -22,7 +22,7 @@ var bot = new Discord.Client();
 bot.on("ready", function() {
     console.log(`Ich mag Nutella! ${bot.guilds.size}`);
 
-    bot.user.setGame(";;help");
+    bot.user.setGame(`auf ${bot.guilds.size} Servern! | ;;help`);
 });
 
 bot.on("message", function(message) {
