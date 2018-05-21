@@ -153,7 +153,7 @@ bot.on("message", function(message) {
             message.channel.sendEmbed(embed)
             break;
         case "roll":
-            if(args[0]) message.channel.sendMessage(roll[Math.floor(Math.random() * roll.length)]);
+            if(args[0]) message.channel.sendMessage( "Du hast eine " + roll[Math.floor(Math.random() * roll.length)] + " gewürfelt!");
             break;
         case "vote":
             var embed = new Discord.RichEmbed()
