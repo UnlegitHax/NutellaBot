@@ -3,6 +3,15 @@ const superagent = require("superagent");
 
 const PREFIX = ";;"
 
+var roll = [
+    "1",
+    "2",
+    "3",
+    "4",
+    "5",
+    "6"
+];
+
 var fortunes = [
     "Ja",
     "Nein",
@@ -132,6 +141,26 @@ bot.on("message", function(message) {
                 .setColor(0x2ecc71)
                 .setThumbnail(bot.user.displayAvatarURL)
             message.channel.sendEmbed(embed)
+        case "whois":
+            var embed = new Discord.RichEmbed()
+                .setDescription("ID")
+                .setColor(0x1abc9c)
+                .setThumbnail(message.author.displayAvatarURL)
+                .addField('ID', `\`\`\`${message.author.id}\`\`\``)
+            message.channel.sendEmbed(embed)
+            break;
+        case "roll":
+            if(args[0]) message.channel.sendMessage(roll[Math.floor(Math.random() * roll.length)]);
+            break;
+        case "vote":
+            var embed = new Discord.RichEmbed()
+            .setTitle("Vote für unseren bot auf diesen Websites!")
+            .setColor(0x1abc9c)
+            .setThumbnail(bot.user.displayAvatarURL)
+            .addField("DiscordBots.org", "https://discordbots.org/bot/434781046152626207")
+            .addField("DiscordBot.world", "https://discordbot.world/bot/434781046152626207")
+            message.channel.sendEmbed(embed)
+            break;
         default:
             message.channel.sendMessage("Dieser Command existiert nicht!")
     }
