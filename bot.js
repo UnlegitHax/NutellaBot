@@ -167,31 +167,6 @@ bot.on("message", function(message) {
             .addField("DiscordBot.world", "https://discordbot.world/bot/434781046152626207")
             message.channel.send(embed)
             break;
-        case "dog":
-              let {body} = await superagent
-                .get(`https://random.dog/woof.json`);
-
-              let dogembed = new Discord.RichEmbed()
-              .setColor("#ff9900")
-              .setTitle("Dog :dog2:")
-              .setImage(body.url)
-              .setFooter("Powered by random.dog");
-
-               message.channel.send(dogembed);
-               break;
-        case "gif":
-            const args = message.content.split(" ").slice(1)
-            if(args.length < 1) return message.reply("please add the search term")
-
-            const res = await got(`https://api.giphy.com/v1/gifs/random?api_key=${api}&tag=${encodeURIComponent(args.join(" "))}`, {json: true})
-            if(!res || !res.body || !res.body.data) return message.reply("i cant find a gif with this search term!")
-
-            const embed = new Discord.RichEmbed()
-            .setImage(res.body.data.image_url)
-            .setAuthor(message.author.tag, message.author.displayAvatarURL)
-
-            message.channel.send({embed: embed});
-            break;
         default:
             message.channel.send("Dieser Command existiert nicht!")
     }
