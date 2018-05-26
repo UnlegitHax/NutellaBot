@@ -1,7 +1,5 @@
 const Discord = require("discord.js");
 const superagent = require("superagent");
-const got = require("got")
-const api = process.env.API_TOKEN
 
 const PREFIX = ";;"
 
