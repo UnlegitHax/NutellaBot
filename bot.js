@@ -1,5 +1,7 @@
 const Discord = require("discord.js");
 const superagent = require("superagent");
+const got = require("got")
+const api = process.env.API_TOKEN
 
 const PREFIX = ";;"
 
@@ -31,7 +33,7 @@ var bot = new Discord.Client();
 bot.on("ready", function() {
     console.log(`Ich mag Nutella! ${bot.guilds.size}`);
 
-    bot.user.setGame(`auf ${bot.guilds.size} Servern und mit ${bot.users.size} Usern! | ;;help`);
+    bot.user.setActivity(`;;help`, {type: "LISTENING"});
 });
 
 bot.on("message", function(message) {
@@ -47,14 +49,14 @@ bot.on("message", function(message) {
                 .setTitle(":ping_pong: **Pong!**")
                 .addField("Mein Ping", bot.ping + "ms")
                 .setColor(0x2ecc71)
-            message.channel.sendEmbed(embed)
+            message.channel.send(embed)
             break;
         case "info":
-            message.channel.sendMessage("Ich bin ein Bot der Nutella mag! Coded by UnlegitHax")
+            message.channel.send("Ich bin ein Bot der Nutella mag! Coded by UnlegitHax")
             break;
         case "8ball":
-            if(args[1]) message.channel.sendMessage(fortunes[Math.floor(Math.random() * fortunes.length)]);
-            else message.channel.sendMessage("Du hast die Frage vergessen :facepalm:");
+            if(args[1]) message.channel.send(fortunes[Math.floor(Math.random() * fortunes.length)]);
+            else message.channel.send("Du hast die Frage vergessen :facepalm:");
             break;
         case "help":
             var embed = new Discord.RichEmbed()
@@ -74,21 +76,22 @@ bot.on("message", function(message) {
                 .addField(";;vote", "Sendet die Vote Links!")
                 .setColor(0x8e44ad)
                 .setFooter("Das sind alle Commands die es zur Zeit gibt!")
-            message.channel.sendEmbed(embed)
+            message.channel.send(embed)
             break;
         case "noticeme":
-            message.channel.sendMessage(message.author.toString() + " Magst du Nutella?");
+            message.channel.send(message.author.toString() + " Magst du Nutella?");
             break;
         case "pong":
-            message.channel.sendMessage("Ping!")
+            message.channel.send("Ping!")
             break;
         case "lenny":
-            message.channel.sendMessage("( ͡° ͜ʖ ͡°)")
+            message.channel.send("( ͡° ͜ʖ ͡°)")
             break;
         case "owner":
             var embed = new Discord.RichEmbed()
                 .setDescription("Dies ist der Bot von UnlegitHax! Abonniere ihn doch auf YouTube: https://www.youtube.com/channel/UCTsuPmKNW6n2ABax7UVb0Uw")
-            message.channel.sendEmbed(embed);
+            message.channel.send(embed);
+            break;
         case "botinfo":
             var embed = new Discord.RichEmbed()
                 .setDescription("Bot Info")
@@ -97,7 +100,7 @@ bot.on("message", function(message) {
                 .addField("Bot Name", bot.user.username)
                 .addField("Erstellt am", bot.user.createdAt)
                 .addField("Mein derzeitiger Ping", bot.ping + "ms")
-            message.channel.sendEmbed(embed)
+            message.channel.send(embed)
             break;
         case "userinfo":
             var embed = new Discord.RichEmbed()
@@ -107,7 +110,7 @@ bot.on("message", function(message) {
                 .addField("User Name", message.author.username)
                 .addField("Beigetreten am", message.author.createdAt)
                 .addField("Avatar URL", message.author.avatarURL)
-            message.channel.sendEmbed(embed)
+            message.channel.send(embed)
             break;
         case "serverinfo":
             var sicon = message.guild.iconURL
@@ -120,7 +123,7 @@ bot.on("message", function(message) {
                 .addField("Du bist beigetreten am", message.member.joinedAt)
                 .addField("Member Anzahl", message.guild.memberCount)
                 .addField("Owner", message.guild.owner)
-            message.channel.sendEmbed(embed)
+            message.channel.send(embed)
             break;
         case "ban":
             if (!message.member.permissions.has("ADMINISTRATOR")) return message.reply("Du hast nicht die Berechtigung diesen Command auszuführen");
@@ -143,17 +146,17 @@ bot.on("message", function(message) {
                 .addField("Bot Invite", "https://discordapp.com/oauth2/authorize?client_id=434781046152626207&scope=bot&permissions=2146958591")
                 .setColor(0x2ecc71)
                 .setThumbnail(bot.user.displayAvatarURL)
-            message.channel.sendEmbed(embed)
+            message.channel.send(embed)
         case "whois":
             var embed = new Discord.RichEmbed()
                 .setDescription("ID")
                 .setColor(0x1abc9c)
                 .setThumbnail(message.author.displayAvatarURL)
                 .addField('ID', `\`\`\`${message.author.id}\`\`\``)
-            message.channel.sendEmbed(embed)
+            message.channel.send(embed)
             break;
         case "roll":
-            if(args[0]) message.channel.sendMessage( "Du hast eine " + roll[Math.floor(Math.random() * roll.length)] + " gewürfelt!");
+            if(args[0]) message.channel.send( "Du hast eine " + roll[Math.floor(Math.random() * roll.length)] + " gewürfelt!");
             break;
         case "vote":
             var embed = new Discord.RichEmbed()
@@ -162,10 +165,35 @@ bot.on("message", function(message) {
             .setThumbnail(bot.user.displayAvatarURL)
             .addField("DiscordBots.org", "https://discordbots.org/bot/434781046152626207")
             .addField("DiscordBot.world", "https://discordbot.world/bot/434781046152626207")
-            message.channel.sendEmbed(embed)
+            message.channel.send(embed)
+            break;
+        case "dog":
+              let {body} = await superagent
+                .get(`https://random.dog/woof.json`);
+
+              let dogembed = new Discord.RichEmbed()
+              .setColor("#ff9900")
+              .setTitle("Dog :dog2:")
+              .setImage(body.url)
+              .setFooter("Powered by random.dog");
+
+               message.channel.send(dogembed);
+               break;
+        case "gif":
+            const args = message.content.split(" ").slice(1)
+            if(args.length < 1) return message.reply("please add the search term")
+
+            const res = await got(`https://api.giphy.com/v1/gifs/random?api_key=${api}&tag=${encodeURIComponent(args.join(" "))}`, {json: true})
+            if(!res || !res.body || !res.body.data) return message.reply("i cant find a gif with this search term!")
+
+            const embed = new Discord.RichEmbed()
+            .setImage(res.body.data.image_url)
+            .setAuthor(message.author.tag, message.author.displayAvatarURL)
+
+            message.channel.send({embed: embed});
             break;
         default:
-            message.channel.sendMessage("Dieser Command existiert nicht!")
+            message.channel.send("Dieser Command existiert nicht!")
     }
 });
 
